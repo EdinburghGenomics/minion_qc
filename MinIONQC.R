@@ -798,7 +798,8 @@ if(file_test("-f", input.file)==TRUE & length(test.file)>1){
     # it's a directory, recursively analyse all sequencing_summary.txt files
   
     # get a list of all sequencing_summary.txt files, recursively
-    summaries = list.files(path = input.file, pattern = "sequencing_summary.txt", recursive = TRUE, full.names = TRUE)
+    # Patched by TIM: look for gzipped files. R can read them anyway so why not?
+    summaries = list.files(path = input.file, pattern = "sequencing_summary.txt.gz", recursive = TRUE, full.names = TRUE)
 
     flog.info("")
     flog.info("**** Analysing the following files ****")
@@ -806,7 +807,8 @@ if(file_test("-f", input.file)==TRUE & length(test.file)>1){
 
     
     # if the user passes a directory with only one sequencing_summary.txt file...
-    if(length(summaries) == 1){
+    # Patched by TIM: For a pipeline we need the output consistent! Force multi-file mode every time.
+    if(FALSE && length(summaries) == 1){
         d = single.flowcell(summaries[1], output.dir, q)
         flog.info('**** Analysis complete ****')
     }else{
